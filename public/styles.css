@@ -1,0 +1,396 @@
+/* === Reset & Base === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #202124;
+  line-height: 1.5;
+  min-width: 768px;
+  overflow-x: hidden;
+}
+
+/* === Header === */
+.dashboard-header {
+  background-color: #fff;
+  border-bottom: 1px solid #dadce0;
+  padding: 16px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.dashboard-header h1 {
+  font-size: 1.375rem;
+  font-weight: 400;
+  color: #3c4043;
+}
+
+/* === Dashboard Main === */
+.dashboard {
+  padding: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* === Grid Layout === */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background-color: #dadce0;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .grid-container {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 1440px) {
+  .grid-container {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+/* === Cell === */
+.cell {
+  background-color: #fff;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  position: relative;
+  transition: box-shadow 0.15s ease;
+}
+
+.cell:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+/* === Letter Label === */
+.cell-letter {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a73e8;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+/* === Idea List === */
+.idea-list {
+  list-style: none;
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 8px;
+}
+
+.idea-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 0;
+  border-bottom: 1px solid #f1f3f4;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.idea-item:last-child {
+  border-bottom: none;
+}
+
+.idea-text {
+  flex: 1;
+  word-break: break-word;
+}
+
+/* === Completed Ideas === */
+.idea-item.completed .idea-text {
+  text-decoration: line-through;
+  color: #80868b;
+}
+
+.idea-item.completed .idea-status-icon::before {
+  content: '✓';
+  color: #34a853;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.idea-status-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === Idea Controls === */
+.idea-controls {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.idea-item:hover .idea-controls {
+  opacity: 1;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #5f6368;
+  line-height: 1;
+}
+
+.btn-icon:hover {
+  background-color: #f1f3f4;
+  color: #202124;
+}
+
+.btn-icon.btn-done:hover {
+  color: #34a853;
+}
+
+.btn-icon.btn-remove:hover {
+  color: #ea4335;
+}
+
+/* === Add Idea === */
+.cell-footer {
+  margin-top: auto;
+}
+
+.btn-add {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1a73e8;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  width: 100%;
+  text-align: left;
+}
+
+.btn-add:hover {
+  background-color: #e8f0fe;
+}
+
+/* === Add Idea Form === */
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.add-form input[type='text'] {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.add-form input[type='text']:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15);
+}
+
+.add-form-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn {
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary {
+  background-color: #1a73e8;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #1557b0;
+}
+
+.btn-cancel {
+  background-color: #f1f3f4;
+  color: #3c4043;
+}
+
+.btn-cancel:hover {
+  background-color: #dadce0;
+}
+
+/* === Validation Error (inline) === */
+.validation-error {
+  color: #d93025;
+  font-size: 0.6875rem;
+  margin-top: 2px;
+}
+
+/* === Cell Error State === */
+.cell-error {
+  background-color: #fce8e6;
+  color: #d93025;
+  font-size: 0.75rem;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+/* === Loading State === */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  color: #5f6368;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e8eaed;
+  border-top-color: #1a73e8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Error Banner === */
+.error-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+  color: #d93025;
+}
+
+.error-banner p {
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.btn-retry {
+  background-color: #1a73e8;
+  color: #fff;
+  padding: 8px 24px;
+  font-size: 0.875rem;
+}
+
+.btn-retry:hover {
+  background-color: #1557b0;
+}
+
+/* === Empty State === */
+.cell-empty {
+  color: #9aa0a6;
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+/* === Utility Classes === */
+.hidden {
+  display: none !important;
+}
+
+/* === Confirmation Dialog === */
+.confirm-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  z-index: 10;
+  border-radius: 4px;
+}
+
+.confirm-dialog p {
+  font-size: 0.8125rem;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #3c4043;
+}
+
+.confirm-dialog-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-confirm-delete {
+  background-color: #ea4335;
+  color: #fff;
+}
+
+.btn-confirm-delete:hover {
+  background-color: #c5221f;
+}
+
+/* === Accessibility === */
+.btn:focus-visible,
+.btn-icon:focus-visible,
+.btn-add:focus-visible,
+input:focus-visible {
+  outline: 2px solid #1a73e8;
+  outline-offset: 2px;
+}
+
+/* === Scrollbar Styling === */
+.idea-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.idea-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.idea-list::-webkit-scrollbar-thumb {
+  background-color: #dadce0;
+  border-radius: 4px;
+}

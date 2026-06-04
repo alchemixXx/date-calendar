@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ukrainian Alphabet Date Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="dashboard-header">
+      <h1>🇺🇦 Alphabet Date Dashboard</h1>
+    </header>
+
+    <main id="dashboard" class="dashboard">
+      <div id="loading" class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading ideas...</p>
+      </div>
+
+      <div id="error-banner" class="error-banner hidden">
+        <p id="error-message">Could not load ideas. Please try again.</p>
+        <button id="retry-btn" class="btn btn-retry">Retry</button>
+      </div>
+
+      <div id="grid" class="grid-container hidden">
+        <!-- 33 cells will be rendered dynamically by JS -->
+      </div>
+    </main>
+
+    <script src="/js/api-client.js"></script>
+    <script src="/js/app.js"></script>
+  </body>
+</html>

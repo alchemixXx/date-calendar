@@ -132,4 +132,63 @@ describe('PersistenceService', () => {
       expect(result).toEqual(testData);
     });
   });
+
+  describe('atomic write', () => {
+    it('should not leave .tmp files after writeData()', async () => {
+      const testData: StoredData = {
+        ideas: [
+          {
+            id: 'tmp-check',
+            letter: 'Д',
+            text: 'Temp file check',
+            done: false,
+            createdAt: '2024-04-01T00:00:00.000Z',
+          },
+        ],
+      };
+
+      await service.writeData(testData);
+
+      const files = await fs.readdir(dataDir);
+      const tmpFiles = files.filter((f) => f.includes('.tmp'));
+      expect(tmpFiles).toHaveLength(0);
+    });
+  });
+
+  describe('SyncService integration', () => {
+    it('should call notifyWrite() on SyncService after successful write', async () => {
+      const mockSyncService = { notifyWrite: jest.fn() } as any;
+      const serviceWithSync = new PersistenceService(dataDir, mockSyncService);
+
+      const testData: StoredData = { ideas: [] };
+      await serviceWithSync.writeData(testData);
+
+      expect(mockSyncService.notifyWrite).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not propagate errors from SyncService.notifyWrite()', async () => {
+      const mockSyncService = {
+        notifyWrite: jest.fn(() => {
+          throw new Error('Sync failure');
+        }),
+      } as any;
+      const serviceWithSync = new PersistenceService(dataDir, mockSyncService);
+
+      const testData: StoredData = { ideas: [] };
+
+      // writeData should resolve successfully even if notifyWrite throws
+      await expect(
+        serviceWithSync.writeData(testData),
+      ).resolves.toBeUndefined();
+    });
+
+    it('should work without SyncService (backward compatibility)', async () => {
+      // The existing service is constructed without SyncService
+      const testData: StoredData = { ideas: [] };
+      await expect(service.writeData(testData)).resolves.toBeUndefined();
+
+      const result = await service.readData();
+      expect(result).toEqual(testData);
+    });
+  });
 });

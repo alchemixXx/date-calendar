@@ -7,15 +7,20 @@ import {
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { StoredData } from '../interfaces/idea.interface';
+import { SyncService } from './sync/sync.service';
+import { DATA_DIR_TOKEN } from './constants';
 
-export const DATA_DIR_TOKEN = 'DATA_DIR';
+export { DATA_DIR_TOKEN };
 
 @Injectable()
 export class PersistenceService {
   private readonly dataDir: string;
   private readonly filePath: string;
 
-  constructor(@Optional() @Inject(DATA_DIR_TOKEN) dataDir?: string) {
+  constructor(
+    @Optional() @Inject(DATA_DIR_TOKEN) dataDir?: string,
+    @Optional() private readonly syncService?: SyncService,
+  ) {
     this.dataDir = dataDir ?? path.join(process.cwd(), 'data');
     this.filePath = path.join(this.dataDir, 'ideas.json');
   }
@@ -38,11 +43,18 @@ export class PersistenceService {
   async writeData(data: StoredData): Promise<void> {
     try {
       await this.ensureDataDirectory();
-      await fs.writeFile(this.filePath, JSON.stringify(data, null, 2), 'utf-8');
+      const tmpPath = `${this.filePath}.tmp-${process.pid}-${Date.now()}`;
+      await fs.writeFile(tmpPath, JSON.stringify(data, null, 2), 'utf-8');
+      await fs.rename(tmpPath, this.filePath);
     } catch (error) {
       throw new InternalServerErrorException(
         'Storage failure: unable to read/write data',
       );
+    }
+    try {
+      this.syncService?.notifyWrite();
+    } catch {
+      // Best-effort: sync errors never propagate into writeData() callers.
     }
   }
 
